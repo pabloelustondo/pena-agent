@@ -1,0 +1,58 @@
+@startuml
+
+title PENA-Agent — Runtime Activity Pipeline
+
+skinparam backgroundColor white
+skinparam shadowing false
+
+skinparam activity {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+  ArrowColor #444444
+}
+
+skinparam note {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+start
+
+:Load user context;
+:Load project / repository context;
+:Retrieve candidate articles;
+:Normalize article metadata;
+:Deduplicate repeated content;
+:Categorize articles;
+:Evaluate source trust;
+:Generate summaries;
+:Rank relevance;
+:Generate structured digest;
+:Persist digest output;
+:Record observability events;
+
+if (User feedback available?) then (yes)
+  :Capture feedback;
+  :Create learning signal;
+  :Update context candidates;
+else (no)
+  :Mark digest as unreviewed;
+endif
+
+:Prepare next iteration inputs;
+
+stop
+
+note right
+This activity pipeline is intentionally simple.
+
+It defines the first executable flow:
+context → articles → trust → summary → digest → observations → learning.
+end note
+
+note bottom
+The pipeline should stay small enough for POC execution,
+but explicit enough to become AI-readable specification context.
+end note
+
+@enduml

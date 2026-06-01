@@ -1,0 +1,82 @@
+@startuml
+
+title PENA POC 01 — Ingestion Design
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+skinparam note {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+actor "Developer / Architect" as Dev
+
+package "Input Sources" {
+  database "Local Markdown Articles" as MD
+  database "Local JSON Articles" as JSON
+  cloud "RSS Feed\nLater Extension" as RSS
+  cloud "URL List\nLater Extension" as URLS
+}
+
+package "Ingestion Module" {
+  component "Input Reader" as READER
+  component "Source Adapter" as ADAPTER
+  component "Article Parser" as PARSER
+  component "Metadata Extractor" as META
+  component "Article Normalizer" as NORMALIZER
+  component "Duplicate Detector" as DEDUP
+  component "Validation Reporter" as VALIDATOR
+}
+
+database "Normalized Article Set" as ARTICLES
+database "Ingestion Observations" as OBS
+
+Dev --> MD : supplies initial inputs
+Dev --> JSON : supplies optional inputs
+
+MD --> READER
+JSON --> READER
+RSS --> ADAPTER : future
+URLS --> ADAPTER : future
+
+READER --> PARSER
+ADAPTER --> PARSER
+PARSER --> META
+META --> NORMALIZER
+NORMALIZER --> DEDUP
+DEDUP --> ARTICLES
+
+PARSER --> VALIDATOR
+NORMALIZER --> VALIDATOR
+DEDUP --> VALIDATOR
+VALIDATOR --> OBS
+
+note bottom of READER
+POC 01 should start with local files.
+External feeds can be added after the pipeline works.
+end note
+
+note right of ARTICLES
+Output should be a clean, normalized article set:
+- title
+- source
+- date
+- body
+- url / reference
+- metadata
+end note
+
+@enduml

@@ -1,0 +1,69 @@
+@startuml
+
+title PENA POC 01 — Runtime Pipeline Design
+
+skinparam backgroundColor white
+skinparam shadowing false
+
+skinparam activity {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+  ArrowColor #444444
+}
+
+skinparam note {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+start
+
+:Start POC run;
+:Load runtime configuration;
+:Load repository context;
+:Load prompt templates;
+:Load local article inputs;
+
+if (Inputs valid?) then (yes)
+  :Normalize article records;
+  :Attach source metadata;
+  :Deduplicate repeated content;
+  :Apply trust scoring;
+  :Apply relevance scoring;
+  :Build LLM summarization prompts;
+  :Call LLM provider;
+  :Validate structured summary response;
+  :Generate markdown digest;
+  :Write digest artifact;
+  :Write observability report;
+  :Write run log;
+
+  if (Human feedback captured?) then (yes)
+    :Create learning note;
+    :Store learning candidate;
+  else (no)
+    :Mark run as unreviewed;
+  endif
+
+  :Prepare next-iteration inputs;
+
+else (no)
+  :Write validation error report;
+  :Stop run safely;
+endif
+
+stop
+
+note right
+This is the first executable POC flow.
+
+It should be implemented as a small,
+observable, local-first CLI pipeline.
+end note
+
+note bottom
+The runtime pipeline turns the low-level design
+into an implementation-ready execution contract.
+end note
+
+@enduml

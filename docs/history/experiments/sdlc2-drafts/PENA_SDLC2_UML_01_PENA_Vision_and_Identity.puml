@@ -1,0 +1,43 @@
+@startuml 01_PENA_Vision_and_Identity
+title PENA-Agent — Vision and Identity
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam rectangle {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+skinparam note {
+  BorderColor #999999
+  BackgroundColor #FFFBEA
+}
+skinparam ArrowColor #444444
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+
+rectangle "PENA-Agent" as PENA {
+  rectangle "Humans + AI + Agents" as HumansAgents
+  rectangle "Personal Epistemic\nNews Aggregator" as PENACore
+  rectangle "AI-Assisted\nEngineering Laboratory" as Lab
+  rectangle "Observability\nand Learning Loops" as Obs
+  rectangle "SDLC2\nValidation Environment" as Validation
+  rectangle "Knowledge-Centric\nEngineering" as Knowledge
+
+  HumansAgents --> PENACore : collaborates with
+  PENACore --> Lab : validates
+  Obs --> Validation : feedback
+  Lab --> Validation : experiments
+  Validation --> Knowledge : evolves toward
+}
+
+note right of PENACore
+PENA-Agent is intentionally both:
+• a useful AI-agent system
+• an SDLC2 engineering experiment
+end note
+
+@enduml

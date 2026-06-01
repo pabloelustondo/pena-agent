@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Downloads"
+		}
+	],
+	"settings": {
+		"plantuml.java": "/Users/paboelustodo/.local/share/plantuml/lib/jvm/bin/java",
+		"plantuml.render": "Local"
+	}
+}

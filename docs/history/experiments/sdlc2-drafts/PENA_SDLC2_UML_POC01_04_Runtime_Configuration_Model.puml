@@ -1,0 +1,98 @@
+@startuml
+
+title PENA POC 01 — Runtime Configuration Model
+
+skinparam backgroundColor white
+skinparam shadowing false
+
+skinparam class {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+  ArrowColor #444444
+}
+
+skinparam artifact {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+artifact "config/poc01.yaml" as YAML
+artifact ".env / secrets" as ENV
+
+class AppConfig {
+  +run_id
+  +topic
+  +environment
+  +max_articles
+}
+
+class SourceConfig {
+  +input_type
+  +input_path
+  +rss_url
+  +source_name
+}
+
+class ModelConfig {
+  +provider
+  +model_name
+  +temperature
+  +max_tokens
+}
+
+class DigestConfig {
+  +output_format
+  +output_path
+  +summary_style
+  +include_uncertainties
+}
+
+class ObservabilityConfig {
+  +log_level
+  +report_path
+  +record_prompts
+  +record_model_metadata
+}
+
+class ScoringConfig {
+  +trust_rules_path
+  +relevance_threshold
+  +novelty_weight
+  +source_weight
+}
+
+class OutputConfig {
+  +digest_directory
+  +reports_directory
+  +learning_directory
+}
+
+YAML --> AppConfig
+YAML --> SourceConfig
+YAML --> ModelConfig
+YAML --> DigestConfig
+YAML --> ObservabilityConfig
+YAML --> ScoringConfig
+YAML --> OutputConfig
+
+ENV --> ModelConfig : API keys / provider secrets
+
+AppConfig --> SourceConfig : selects inputs
+AppConfig --> ModelConfig : selects model
+AppConfig --> DigestConfig : controls digest
+AppConfig --> ObservabilityConfig : controls reporting
+AppConfig --> ScoringConfig : controls scoring
+DigestConfig --> OutputConfig
+ObservabilityConfig --> OutputConfig
+
+note bottom of AppConfig
+Configuration gives POC 01 flexibility
+without changing code.
+end note
+
+note right of ENV
+Secrets should not be committed.
+Only .env.example belongs in the repository.
+end note
+
+@enduml

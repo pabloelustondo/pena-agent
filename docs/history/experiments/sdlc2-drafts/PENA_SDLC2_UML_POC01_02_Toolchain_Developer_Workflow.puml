@@ -1,0 +1,82 @@
+@startuml
+
+title PENA POC 01 — Toolchain and Developer Workflow
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+
+skinparam node {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+skinparam cloud {
+  BorderColor #666666
+  BackgroundColor #F2F2F2
+}
+
+actor "Developer / Architect" as Dev
+actor "AI Coding Assistant" as AI
+
+node "Developer MacBook" as LAPTOP {
+
+  component "VS Code" as VSCODE
+  component "GitHub Copilot" as COPILOT
+  component "Terminal" as TERM
+  component "PlantUML Preview" as PLANTUML
+  component "Python venv" as VENV
+  component "pytest" as PYTEST
+
+}
+
+cloud "ChatGPT / Claude / Codex" as CHATTOOLS
+node "GitHub Repository" as GITHUB
+database "Specs / UML" as SPECS
+database "Source Code" as SRC
+database "Runtime Outputs" as OUTPUT
+database "Observability Reports" as OBS
+
+Dev --> VSCODE : edit specs/code
+Dev --> TERM : run commands
+Dev --> PLANTUML : inspect diagrams
+
+AI --> COPILOT : inline coding help
+AI --> CHATTOOLS : design/refinement help
+
+VSCODE --> COPILOT : assisted edits
+VSCODE --> GITHUB : push / pull
+GITHUB --> SPECS
+GITHUB --> SRC
+
+TERM --> VENV : activate runtime
+TERM --> PYTEST : run tests
+TERM --> SRC : execute POC CLI
+
+SRC --> OUTPUT : markdown digest
+SRC --> OBS : JSON/log reports
+
+PLANTUML --> SPECS : render .puml
+
+note bottom of LAPTOP
+POC 01 development is local-first:
+VS Code + Git + Python + UML + AI assistance.
+end note
+
+note right of GITHUB
+The repository remains the source of truth
+for specs, code, tests, outputs, and learning.
+end note
+
+@enduml

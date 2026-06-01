@@ -1,0 +1,80 @@
+@startuml
+
+title PENA POC 01 — Observability and Logging Design
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+skinparam artifact {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+package "Runtime Pipeline" {
+  component "Ingestion Step" as ING
+  component "Scoring Step" as SCORE
+  component "Summarization Step" as SUM
+  component "Digest Step" as DIGEST
+}
+
+package "Observability Module" {
+  component "Run Logger" as LOGGER
+  component "Event Collector" as EVENTS
+  component "Metrics Collector" as METRICS
+  component "Prompt Trace Writer" as PROMPTS
+  component "Error Reporter" as ERRORS
+  component "Run Report Builder" as REPORTBUILDER
+}
+
+database "Run Context" as RUNCTX
+artifact "run-report.json" as JSONREPORT
+artifact "run-summary.md" as MDREPORT
+artifact "poc01.log" as LOGFILE
+artifact "prompt-trace.json" as PROMPTTRACE
+
+ING --> EVENTS : ingestion events
+SCORE --> EVENTS : scoring events
+SUM --> EVENTS : model events
+DIGEST --> EVENTS : output events
+
+RUNCTX --> LOGGER : run_id / timestamp / config
+EVENTS --> REPORTBUILDER
+METRICS --> REPORTBUILDER
+PROMPTS --> REPORTBUILDER
+ERRORS --> REPORTBUILDER
+
+LOGGER --> LOGFILE
+PROMPTS --> PROMPTTRACE
+REPORTBUILDER --> JSONREPORT
+REPORTBUILDER --> MDREPORT
+
+SUM --> PROMPTS : prompt + response metadata
+ING --> ERRORS : input errors
+SUM --> ERRORS : LLM errors
+DIGEST --> ERRORS : write errors
+
+note bottom of REPORTBUILDER
+Observability is part of the POC,
+not an afterthought.
+Every run should leave evidence.
+end note
+
+note right of JSONREPORT
+JSON is machine-readable.
+Markdown is human-readable.
+Both are useful.
+end note
+
+@enduml

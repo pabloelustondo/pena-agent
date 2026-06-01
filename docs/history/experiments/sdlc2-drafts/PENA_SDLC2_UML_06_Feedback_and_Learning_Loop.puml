@@ -1,0 +1,50 @@
+@startuml
+
+title PENA-Agent — Feedback and Learning Loop
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor #444444
+  LifeLineBorderColor #2F5597
+  LifeLineBackgroundColor #F8FBFF
+  ParticipantBorderColor #2F5597
+  ParticipantBackgroundColor #F8FBFF
+}
+
+actor User
+actor "Developer / Architect" as Dev
+
+participant "PENA Runtime" as Runtime
+participant "Observability Engine" as OBS
+participant "Review / Validate" as Review
+participant "Learning Extractor" as Learn
+participant "Repository\nKnowledge Base" as KB
+participant "Specs / UML" as Specs
+participant "Next Iteration" as Next
+
+User -> Runtime : Use digest\nprovide feedback
+Runtime -> OBS : Emit runtime events\noutputs\nquality signals
+
+Dev -> OBS : Inspect reports\nreview behavior
+OBS -> Review : Provide evidence\nlogs\nmetrics\nAI behavior traces
+
+Review -> Learn : Identify lessons\npatterns\nrisks\ncorrections
+Learn -> KB : Store learning artifact
+
+KB -> Specs : Update semantic context\nconstraints\nmodels
+Specs -> Next : Guide next build / refinement
+Next -> Runtime : Improved behavior
+
+note over OBS,Review
+Observability is not only production monitoring.
+It also observes AI behavior, context quality,
+spec quality, and engineering workflow.
+end note
+
+note over KB,Specs
+Learning becomes persistent context.
+The repository accumulates organizational memory.
+end note
+
+@enduml

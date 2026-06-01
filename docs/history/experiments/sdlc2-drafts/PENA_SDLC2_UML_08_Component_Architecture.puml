@@ -1,0 +1,89 @@
+@startuml
+
+title PENA-Agent — Component Architecture
+
+skinparam backgroundColor white
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+skinparam cloud {
+  BorderColor #666666
+  BackgroundColor #F2F2F2
+}
+
+actor User
+actor "Developer / Architect" as Dev
+
+package "PENA-Agent Runtime" {
+
+  component "Runtime Orchestrator" as ORCH
+  component "Context Manager" as CM
+  component "Ingestion Engine" as ING
+  component "Trust Evaluator" as TRUST
+  component "Relevance Ranker" as RANK
+  component "Summarization Engine" as SUM
+  component "Digest Generator" as DIGEST
+  component "Observability Writer" as OBSW
+  component "Learning Extractor" as LEARN
+
+}
+
+database "Repository Knowledge Base" as KB
+database "Observability Artifacts" as OBS
+cloud "News / RSS Sources" as NEWS
+cloud "LLM Providers" as LLM
+
+User --> ORCH : request digest
+Dev --> KB : maintains specs\nreviews context
+
+ORCH --> CM : load grounding context
+CM --> KB : read specs\npreferences\nlearning
+
+ORCH --> ING : retrieve candidate articles
+ING --> NEWS : fetch content
+
+ORCH --> TRUST : evaluate source quality
+TRUST --> KB : use trust rules\nsource memory
+
+ORCH --> RANK : rank relevance
+RANK --> CM : use user context
+
+ORCH --> SUM : summarize / analyze
+SUM --> LLM : prompt with context
+
+ORCH --> DIGEST : assemble digest
+DIGEST --> User : present output
+
+ORCH --> OBSW : emit events\nquality signals
+OBSW --> OBS : persist logs\nmetrics\nreports
+
+OBSW --> LEARN : provide observations
+LEARN --> KB : write learning artifacts
+
+note bottom of ORCH
+The orchestrator coordinates the first executable PENA flow.
+Components remain small and testable.
+end note
+
+note right of KB
+Repository knowledge includes:
+- specs
+- UML
+- prompts
+- context
+- learning artifacts
+- provenance notes
+end note
+
+@enduml

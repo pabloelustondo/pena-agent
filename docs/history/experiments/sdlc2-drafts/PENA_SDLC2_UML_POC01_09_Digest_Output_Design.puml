@@ -1,0 +1,98 @@
+@startuml
+
+title PENA POC 01 — Digest Output Design
+
+skinparam backgroundColor white
+skinparam shadowing false
+
+skinparam class {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+  ArrowColor #444444
+}
+
+skinparam artifact {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+artifact "digest-YYYYMMDD-HHMM.md" as DIGESTFILE
+
+class DigestDocument {
+  +digest_id
+  +run_id
+  +topic
+  +created_at
+  +summary_style
+}
+
+class DigestHeader {
+  +title
+  +topic
+  +date
+  +model_used
+  +input_count
+}
+
+class ExecutiveSummary {
+  +short_summary
+  +key_takeaways
+}
+
+class DigestItem {
+  +rank
+  +title
+  +source
+  +url
+  +summary
+}
+
+class TrustRelevanceBlock {
+  +trust_score
+  +relevance_score
+  +reasons
+  +uncertainty_notes
+}
+
+class SourceNotes {
+  +source_name
+  +source_type
+  +source_reputation_note
+}
+
+class FollowUpSection {
+  +recommended_questions
+  +items_to_verify
+  +possible_next_sources
+}
+
+class ObservabilitySummary {
+  +run_id
+  +prompt_version
+  +model_metadata
+  +warnings
+  +output_paths
+}
+
+DigestDocument --> DigestHeader
+DigestDocument --> ExecutiveSummary
+DigestDocument --> DigestItem
+DigestDocument --> FollowUpSection
+DigestDocument --> ObservabilitySummary
+
+DigestItem --> TrustRelevanceBlock
+DigestItem --> SourceNotes
+
+DigestDocument --> DIGESTFILE : rendered as Markdown
+
+note bottom of DigestDocument
+The digest is the first user-facing artifact.
+It should be useful before any web UI exists.
+end note
+
+note right of ObservabilitySummary
+POC 01 includes operational metadata
+so the human can inspect how the result was produced.
+end note
+
+@enduml
