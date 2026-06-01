@@ -1,0 +1,28 @@
+# Package Manifest
+
+- `00-readme-index.md`
+- `01-component-tree.md`
+- `02-golden-path-use-case-001.md`
+- `03-root-component-subcomponents.md`
+- `04-runtime-orchestration-subcomponents.md`
+- `05-context-management-subcomponents.md`
+- `06-ingestion-subcomponents.md`
+- `07-trust-relevance-scoring-subcomponents.md`
+- `08-llm-summarization-subcomponents.md`
+- `09-digest-generation-subcomponents.md`
+- `10-observability-logging-subcomponents.md`
+- `11-learning-extraction-subcomponents.md`
+- `12-repository-knowledge-base-subcomponents.md`
+- `13-configuration-subcomponents.md`
+- `14-developer-toolchain-subcomponents.md`
+- `15-test-harness-subcomponents.md`
+- `16-data-contracts.md`
+- `17-subsystem-collaboration-map.md`
+- `18-executable-stub-contract.md`
+- `19-golden-path-expected-output.md`
+- `20-test-evidence-and-trace-spec.md`
+- `21-project-folder-structure-mapping.md`
+- `22-implementation-sequencing-plan.md`
+- `23-next-agent-handoff-instructions.md`
+- `24-open-questions-and-design-decisions.md`
+- `25-glossary.md`

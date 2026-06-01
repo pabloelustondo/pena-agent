@@ -1,0 +1,100 @@
+@startuml
+
+title PENA-Agent — Domain Model
+
+skinparam backgroundColor white
+skinparam shadowing false
+
+skinparam class {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+  ArrowColor #444444
+}
+
+class UserContext {
+  +userId
+  +interests
+  +expertiseAreas
+  +preferences
+  +trustPreferences
+}
+
+class Source {
+  +sourceId
+  +name
+  +url
+  +category
+  +trustLevel
+}
+
+class Article {
+  +articleId
+  +title
+  +content
+  +publicationDate
+  +author
+}
+
+class Summary {
+  +summaryId
+  +summaryText
+  +modelUsed
+  +generationDate
+}
+
+class Digest {
+  +digestId
+  +creationDate
+  +topic
+}
+
+class TrustSignal {
+  +signalType
+  +score
+  +reason
+}
+
+class RelevanceScore {
+  +score
+  +reasoning
+}
+
+class Observation {
+  +observationId
+  +timestamp
+  +eventType
+  +details
+}
+
+class LearningArtifact {
+  +artifactId
+  +lesson
+  +confidenceLevel
+}
+
+UserContext --> Digest : personalizes
+Digest --> Article : contains
+Article --> Source : originates from
+Article --> Summary : summarized as
+Article --> TrustSignal : evaluated by
+Article --> RelevanceScore : ranked by
+
+Observation --> Digest : observes
+Observation --> Article : tracks
+LearningArtifact --> Observation : extracted from
+
+note bottom of UserContext
+Context is treated as:
+- active semantic memory
+- personalization substrate
+- AI grounding context
+end note
+
+note right of LearningArtifact
+Learning artifacts represent:
+- reusable insights
+- validated patterns
+- SDLC2 knowledge accumulation
+end note
+
+@enduml

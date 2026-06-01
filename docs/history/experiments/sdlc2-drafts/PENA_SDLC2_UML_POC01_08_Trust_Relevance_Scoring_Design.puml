@@ -1,0 +1,71 @@
+@startuml
+
+title PENA POC 01 — Trust and Relevance Scoring Design
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+skinparam note {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+package "Scoring Module" {
+
+  component "Trust Evaluator" as TRUST
+  component "Relevance Ranker" as RANK
+  component "Score Explainer" as EXPLAIN
+  component "Scoring Config Loader" as CONFIG
+  component "Scored Article Builder" as BUILDER
+
+}
+
+database "Normalized Article Set" as ARTICLES
+database "User / Project Context" as CONTEXT
+database "Trust Rules" as RULES
+database "Scored Article Set" as SCORED
+database "Scoring Observations" as OBS
+
+ARTICLES --> TRUST : article metadata\nsource info
+ARTICLES --> RANK : article content\ntopic match
+
+CONTEXT --> RANK : user interests\nproject focus
+CONTEXT --> TRUST : trust preferences
+
+CONFIG --> RULES : loads
+RULES --> TRUST : scoring rules
+
+TRUST --> EXPLAIN : trust score\ntrust reasons
+RANK --> EXPLAIN : relevance score\nranking reasons
+
+EXPLAIN --> BUILDER : score explanation
+BUILDER --> SCORED : scored articles
+BUILDER --> OBS : scoring metadata
+
+note bottom of TRUST
+POC 01 scoring should be simple and explainable.
+No complex ML is required yet.
+end note
+
+note right of SCORED
+Each scored article should include:
+- trust score
+- relevance score
+- reasons
+- uncertainty notes
+- source notes
+end note
+
+@enduml

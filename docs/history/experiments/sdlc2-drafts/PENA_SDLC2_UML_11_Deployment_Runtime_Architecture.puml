@@ -1,0 +1,76 @@
+@startuml
+
+title PENA-Agent — Deployment / Runtime Architecture
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam componentStyle rectangle
+
+skinparam node {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam cloud {
+  BorderColor #666666
+  BackgroundColor #F2F2F2
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+node "Developer Laptop" as LAPTOP {
+
+  node "VS Code + Copilot" as VSCODE
+
+  node "Local Python Runtime" as PYTHON {
+
+    component "PENA Runtime" as RUNTIME
+    component "Observability Engine" as OBS
+    component "Learning Extractor" as LEARN
+
+  }
+
+  database "Local Cache / Artifacts" as LOCAL
+
+}
+
+node "GitHub Repository" as GITHUB {
+  database "Specs / UML / Context" as SPECS
+}
+
+cloud "LLM Providers" as LLM
+cloud "News / RSS APIs" as NEWS
+
+database "Observability Reports" as REPORTS
+
+VSCODE --> GITHUB : push / pull
+VSCODE --> PYTHON : run / debug
+
+RUNTIME --> NEWS : retrieve content
+RUNTIME --> LLM : summarize / analyze
+
+RUNTIME --> OBS : emit runtime signals
+OBS --> REPORTS : logs / metrics / traces
+
+LEARN --> SPECS : learning artifacts
+RUNTIME --> LOCAL : temporary outputs
+
+GITHUB --> SPECS
+PYTHON --> SPECS : load context
+
+note bottom of PYTHON
+Initial deployment remains intentionally simple:
+- local runtime
+- iterative experimentation
+- observable execution
+- human in the loop
+end note
+
+note right of SPECS
+Repository specifications become active runtime grounding context.
+end note
+
+@enduml

@@ -1,0 +1,68 @@
+@startuml
+
+title PENA POC 01 — LLM Summarization Design
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam sequence {
+  ArrowColor #444444
+  LifeLineBorderColor #2F5597
+  LifeLineBackgroundColor #F8FBFF
+  ParticipantBorderColor #2F5597
+  ParticipantBackgroundColor #F8FBFF
+}
+
+participant "Runtime Pipeline" as PIPE
+participant "Context Loader" as CTX
+participant "Prompt Builder" as PROMPT
+participant "LLM Client" as CLIENT
+participant "LLM Provider" as LLM
+participant "Summary Parser" as PARSER
+participant "Summary Validator" as VALIDATOR
+participant "Observability Writer" as OBS
+
+database "Repository Context\nSpecs / Prompts / Preferences" as REPO
+database "Summary Result" as RESULT
+
+PIPE -> CTX : request grounding context
+CTX -> REPO : load trusted context\nsummary instructions\nprompt template
+REPO --> CTX : context package
+CTX --> PIPE : grounding context
+
+PIPE -> PROMPT : build prompt(article, context)
+PROMPT --> PIPE : structured prompt
+
+PIPE -> CLIENT : summarize(prompt, model_config)
+CLIENT -> LLM : call model
+LLM --> CLIENT : raw response
+CLIENT --> PIPE : model response
+
+PIPE -> PARSER : parse structured response
+PARSER --> PIPE : parsed summary object
+
+PIPE -> VALIDATOR : validate schema\nrequired fields\nuncertainty notes
+
+alt valid response
+  VALIDATOR --> PIPE : accepted summary
+  PIPE -> RESULT : store summary result
+else invalid response
+  VALIDATOR --> PIPE : validation error
+  PIPE -> OBS : record parse/validation failure
+end
+
+PIPE -> OBS : record prompt version\nmodel used\nlatency\nsummary metadata
+
+note over PROMPT,CLIENT
+The LLM call must be grounded by:
+- article content
+- repository context
+- prompt template
+- output constraints
+end note
+
+note over VALIDATOR,OBS
+POC 01 should validate structure first.
+Do not over-test subjective summary quality yet.
+end note
+
+@enduml

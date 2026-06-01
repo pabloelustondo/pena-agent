@@ -1,0 +1,93 @@
+@startuml
+
+title PENA-Agent — Agent and AI Interaction Topology
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+skinparam cloud {
+  BorderColor #666666
+  BackgroundColor #F2F2F2
+}
+
+actor User
+actor "Developer / Architect" as Dev
+
+package "PENA Agent System" {
+
+  component "Orchestrator Agent" as ORCH
+  component "Context Agent" as CTX
+  component "Ingestion Agent" as ING
+  component "Trust Evaluation Agent" as TRUST
+  component "Summarization Agent" as SUM
+  component "Relevance Ranking Agent" as RANK
+  component "Digest Agent" as DIGEST
+  component "Observability Agent" as OBSAG
+  component "Learning Agent" as LEARN
+
+}
+
+database "Repository Context\nSpecs / UML / Learning" as REPO
+database "Runtime Observations" as RUNTIMEOBS
+cloud "LLM Providers" as LLM
+cloud "News / RSS Sources" as NEWS
+
+User --> ORCH : request digest\nprovide feedback
+Dev --> REPO : curate specs\nreview outputs
+
+ORCH --> CTX : request grounding context
+CTX --> REPO : load trusted context\nprovenance\npreferences
+CTX --> ORCH : context package
+
+ORCH --> ING : collect candidate content
+ING --> NEWS : retrieve articles
+ING --> ORCH : article set
+
+ORCH --> TRUST : evaluate trust
+TRUST --> REPO : source history\ntrust rules
+TRUST --> ORCH : trust signals
+
+ORCH --> SUM : summarize / analyze
+SUM --> LLM : context-grounded prompts
+SUM --> ORCH : summaries
+
+ORCH --> RANK : rank relevance
+RANK --> CTX : user context
+RANK --> ORCH : ranked items
+
+ORCH --> DIGEST : assemble digest
+DIGEST --> User : deliver digest
+
+ORCH --> OBSAG : emit interaction traces
+OBSAG --> RUNTIMEOBS : store observations
+
+OBSAG --> LEARN : provide evidence
+LEARN --> REPO : write learning artifacts
+
+note bottom of ORCH
+The orchestrator coordinates specialized agents.
+Each agent has a narrow responsibility.
+Human governance remains central.
+end note
+
+note right of REPO
+The repository acts as:
+- memory
+- semantic grounding
+- trust boundary
+- learning surface
+end note
+
+@enduml

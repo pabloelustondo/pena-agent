@@ -1,0 +1,76 @@
+@startuml 02-System_Context
+title PENA-Agent — System Context Diagram
+
+skinparam backgroundColor white
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+skinparam rectangle {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam actor {
+  BorderColor #444444
+  BackgroundColor #F5F5F5
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+skinparam cloud {
+  BorderColor #666666
+  BackgroundColor #F2F2F2
+}
+
+actor User
+actor Developer
+
+rectangle "PENA-Agent" as PENA {
+
+  component "Context Manager" as CM
+  component "Digest Generator" as DG
+  component "Trust Evaluator" as TE
+  component "Observability Engine" as OE
+
+}
+
+cloud "LLM Providers" as LLM
+cloud "News / RSS Sources" as NEWS
+database "Repository Knowledge Base" as KB
+database "Observability Artifacts" as OBS
+
+rectangle "GitHub Repository" as GITHUB
+rectangle "VS Code + Copilot" as VSCODE
+
+User --> PENA : requests digest\nreviews summaries
+
+Developer --> VSCODE : develops
+VSCODE --> GITHUB : syncs specs/code
+
+PENA --> NEWS : retrieves articles
+PENA --> LLM : summarizes\nanalyzes\nranks
+
+PENA --> KB : loads context
+PENA --> OBS : stores runtime observations
+
+OE --> OBS : metrics\nlogs\nreports
+
+GITHUB --> KB : specifications\nplans\nlearning artifacts
+
+note bottom of KB
+Context is treated as:
+- organizational memory
+- semantic grounding
+- AI operational context
+end note
+
+@enduml

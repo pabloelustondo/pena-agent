@@ -1,0 +1,92 @@
+@startuml
+
+title PENA-Agent — Context Trust and Provenance Model
+
+skinparam backgroundColor white
+skinparam shadowing false
+
+skinparam rectangle {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+skinparam note {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+package "Semantic Provenance" {
+
+  rectangle "Canonical" as CANON
+  rectangle "Reviewed" as REVIEWED
+  rectangle "Reference / Factual" as FACT
+  rectangle "Experimental" as EXP
+  rectangle "Generated" as GEN
+  rectangle "Deprecated" as DEP
+
+}
+
+package "Lifecycle Maturity" {
+
+  rectangle "Working" as WORK
+  rectangle "Dev" as DEV
+  rectangle "Release" as REL
+  rectangle "Main" as MAIN
+
+}
+
+database "Operational Confidence" as CONF
+
+rectangle "Repository Context" as CONTEXT
+rectangle "AI Operational Context" as AICONTEXT
+rectangle "Human Review / Governance" as GOV
+
+CONTEXT --> CANON
+CONTEXT --> REVIEWED
+CONTEXT --> FACT
+CONTEXT --> EXP
+CONTEXT --> GEN
+CONTEXT --> DEP
+
+CONTEXT --> WORK
+CONTEXT --> DEV
+CONTEXT --> REL
+CONTEXT --> MAIN
+
+CANON --> CONF
+REVIEWED --> CONF
+FACT --> CONF
+EXP --> CONF
+GEN --> CONF
+DEP --> CONF
+
+WORK --> CONF
+DEV --> CONF
+REL --> CONF
+MAIN --> CONF
+
+CONF --> AICONTEXT : shapes runtime trust
+
+GOV --> REVIEWED
+GOV --> CANON
+GOV --> REL
+GOV --> MAIN
+
+note bottom of CONF
+Operational confidence emerges from:
+- semantic trust
+- lifecycle maturity
+- provenance quality
+- human review
+end note
+
+note right of AICONTEXT
+Not all context should influence AI equally.
+end note
+
+@enduml

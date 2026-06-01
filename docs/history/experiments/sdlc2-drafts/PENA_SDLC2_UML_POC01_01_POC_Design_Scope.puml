@@ -1,0 +1,94 @@
+@startuml
+
+title PENA POC 01 — Design Scope
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+skinparam rectangle {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam database {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+skinparam note {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+actor "Developer / Architect" as Dev
+actor "User / Reviewer" as User
+
+package "POC 01 — Epistemic Digest" {
+
+  rectangle "Included in POC 01" as INCLUDED {
+    component "Manual Topic Input" as TOPIC
+    component "Local Article Input" as ARTICLEINPUT
+    component "Basic Article Normalization" as NORMALIZE
+    component "LLM Summarization" as SUMMARY
+    component "Trust / Relevance Notes" as TRUST
+    component "Markdown Digest Output" as DIGEST
+    component "JSON Observability Report" as OBS
+    component "Learning Note" as LEARNING
+  }
+
+  rectangle "Explicitly Excluded from POC 01" as EXCLUDED {
+    component "Polished Web UI" as WEBUI
+    component "User Accounts / Login" as LOGIN
+    component "Production Auth" as AUTH
+    component "Vector Database" as VECTOR
+    component "Complex Multi-Agent Runtime" as MULTIAGENT
+    component "Cloud Deployment" as CLOUD
+    component "Background Scheduler" as SCHED
+  }
+
+}
+
+database "Repository Context\nSpecs / UML / Prompts" as REPO
+database "Runtime Artifacts\nDigest / Logs / Reports" as ARTIFACTS
+
+Dev --> TOPIC : defines topic
+Dev --> ARTICLEINPUT : supplies inputs
+Dev --> REPO : maintains specs
+
+User --> DIGEST : reviews output
+User --> LEARNING : provides feedback
+
+TOPIC --> ARTICLEINPUT
+ARTICLEINPUT --> NORMALIZE
+NORMALIZE --> SUMMARY
+SUMMARY --> TRUST
+TRUST --> DIGEST
+DIGEST --> OBS
+OBS --> LEARNING
+
+REPO --> SUMMARY : grounding context
+DIGEST --> ARTIFACTS
+OBS --> ARTIFACTS
+LEARNING --> REPO : feeds next iteration
+
+note bottom of INCLUDED
+POC 01 is intentionally small:
+manual/semi-manual input
+→ digest generation
+→ observability
+→ learning.
+end note
+
+note right of EXCLUDED
+Excluded items may appear in later POCs
+or in the structured implementation phase.
+They are intentionally out of scope here.
+end note
+
+@enduml

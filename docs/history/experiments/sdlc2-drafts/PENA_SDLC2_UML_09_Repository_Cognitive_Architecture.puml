@@ -1,0 +1,84 @@
+@startuml
+
+title PENA-Agent — Repository Cognitive Architecture
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+skinparam package {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam rectangle {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+actor "Developer / Architect" as Dev
+actor "AI Assistant / Agent" as AI
+
+package "pena-agent repository" {
+
+  package "01-context" as CONTEXT
+  package "02-intent" as INTENT
+  package "03-benchmark" as BENCH
+  package "04-planning" as PLAN
+  package "05-specs" as SPECS
+  package "06-vibepoc" as VIBE
+  package "07-buildtest" as BUILD
+  package "08-validate" as VALIDATE
+  package "09-runtime" as RUNTIME
+  package "10-observability" as OBS
+  package "11-learning" as LEARN
+
+}
+
+rectangle "Repository Memory" as MEMORY
+rectangle "Semantic Grounding" as GROUND
+rectangle "AI Operational Context" as AICONTEXT
+
+Dev --> CONTEXT : curates
+Dev --> SPECS : refines
+Dev --> VALIDATE : reviews
+Dev --> LEARN : extracts lessons
+
+AI --> CONTEXT : reads context
+AI --> SPECS : uses specifications
+AI --> BUILD : assists implementation
+AI --> OBS : helps analyze signals
+
+CONTEXT --> INTENT
+INTENT --> BENCH
+BENCH --> PLAN
+PLAN --> SPECS
+SPECS --> VIBE
+VIBE --> BUILD
+BUILD --> VALIDATE
+VALIDATE --> RUNTIME
+RUNTIME --> OBS
+OBS --> LEARN
+LEARN --> CONTEXT : feeds back
+
+CONTEXT --> MEMORY
+SPECS --> GROUND
+LEARN --> MEMORY
+MEMORY --> AICONTEXT
+GROUND --> AICONTEXT
+
+note bottom of MEMORY
+The repository is not only a code container.
+It is accumulated organizational memory.
+end note
+
+note right of AICONTEXT
+AI behavior is shaped by:
+- context quality
+- specification clarity
+- provenance
+- feedback
+- learning artifacts
+end note
+
+@enduml

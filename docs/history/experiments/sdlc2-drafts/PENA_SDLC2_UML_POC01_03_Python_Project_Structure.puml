@@ -1,0 +1,112 @@
+@startuml
+
+title PENA POC 01 — Python Project Structure
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+skinparam package {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam folder {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam artifact {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+package "pena-agent repository" {
+
+  artifact "pyproject.toml" as PYPROJECT
+  artifact "README.md" as README
+  artifact ".env.example" as ENVEX
+  artifact "config/poc01.yaml" as CONFIG
+
+  package "src/pena" as SRC {
+    artifact "__init__.py" as INIT
+    artifact "cli.py" as CLI
+    artifact "config.py" as CONFIGPY
+    artifact "models.py" as MODELS
+
+    package "ingestion" as INGESTION {
+      artifact "reader.py" as READER
+      artifact "normalizer.py" as NORMALIZER
+    }
+
+    package "summarization" as SUM {
+      artifact "prompt_builder.py" as PROMPT
+      artifact "llm_client.py" as LLMCLIENT
+      artifact "summarizer.py" as SUMMARIZER
+    }
+
+    package "scoring" as SCORE {
+      artifact "trust.py" as TRUST
+      artifact "relevance.py" as REL
+    }
+
+    package "digest" as DIGEST {
+      artifact "generator.py" as GENERATOR
+      artifact "markdown_writer.py" as MDWRITER
+    }
+
+    package "observability" as OBS {
+      artifact "run_report.py" as RUNREPORT
+      artifact "logger.py" as LOGGER
+    }
+
+    package "learning" as LEARN {
+      artifact "extractor.py" as EXTRACTOR
+    }
+  }
+
+  package "tests" as TESTS {
+    artifact "test_config.py" as TCONFIG
+    artifact "test_ingestion.py" as TING
+    artifact "test_digest.py" as TDIGEST
+    artifact "test_scoring.py" as TSCORE
+  }
+
+}
+
+CLI --> CONFIGPY : loads config
+CONFIGPY --> CONFIG : reads
+CLI --> READER : starts pipeline
+READER --> NORMALIZER
+NORMALIZER --> SUMMARIZER
+SUMMARIZER --> PROMPT
+SUMMARIZER --> LLMCLIENT
+NORMALIZER --> TRUST
+NORMALIZER --> REL
+TRUST --> GENERATOR
+REL --> GENERATOR
+GENERATOR --> MDWRITER
+GENERATOR --> RUNREPORT
+RUNREPORT --> LOGGER
+RUNREPORT --> EXTRACTOR
+
+MODELS ..> INGESTION
+MODELS ..> SUM
+MODELS ..> SCORE
+MODELS ..> DIGEST
+MODELS ..> OBS
+MODELS ..> LEARN
+
+TESTS ..> SRC : validates deterministic boundaries
+
+note bottom of SRC
+POC 01 uses a simple Python module structure.
+The goal is clarity, testability, and AI-readable boundaries.
+end note
+
+note right of PYPROJECT
+pyproject.toml is the Python project metadata file.
+It is the closest modern equivalent to package.json in this POC.
+end note
+
+@enduml

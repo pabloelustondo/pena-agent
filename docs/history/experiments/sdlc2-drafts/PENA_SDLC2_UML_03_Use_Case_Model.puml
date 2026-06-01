@@ -1,0 +1,60 @@
+@startuml
+
+title PENA-Agent — Use Case Model
+
+left to right direction
+
+skinparam backgroundColor white
+skinparam shadowing false
+
+skinparam actor {
+  BorderColor #444444
+  BackgroundColor #F5F5F5
+}
+
+skinparam usecase {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+actor User
+actor Developer
+
+rectangle "PENA-Agent" {
+
+  usecase "Collect Articles" as UC1
+  usecase "Filter Noise" as UC2
+  usecase "Evaluate Source Quality" as UC3
+  usecase "Summarize Content" as UC4
+  usecase "Categorize Information" as UC5
+  usecase "Generate Digest" as UC6
+  usecase "Adapt to User Context" as UC7
+  usecase "Capture Feedback" as UC8
+  usecase "Generate Observability Reports" as UC9
+  usecase "Refine Specifications" as UC10
+  usecase "Evaluate AI Workflow Quality" as UC11
+
+}
+
+User --> UC1
+User --> UC6
+User --> UC7
+User --> UC8
+
+UC6 --> UC2 : <<includes>>
+UC6 --> UC3 : <<includes>>
+UC6 --> UC4 : <<includes>>
+UC6 --> UC5 : <<includes>>
+UC6 --> UC7 : <<includes>>
+
+Developer --> UC9
+Developer --> UC10
+Developer --> UC11
+
+note bottom of UC11
+PENA-Agent is intentionally both:
+- a user-facing system
+- and an SDLC2 engineering laboratory
+end note
+
+@enduml

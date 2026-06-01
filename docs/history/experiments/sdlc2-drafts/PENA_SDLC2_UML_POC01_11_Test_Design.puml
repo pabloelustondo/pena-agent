@@ -1,0 +1,91 @@
+@startuml
+
+title PENA POC 01 — Test Design
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+
+skinparam package {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam component {
+  BorderColor #2F5597
+  BackgroundColor #F8FBFF
+}
+
+skinparam artifact {
+  BorderColor #666666
+  BackgroundColor #FFFCE8
+}
+
+package "Production Modules" {
+
+  component "Config Loader" as CONFIG
+  component "Input Reader" as READER
+  component "Article Normalizer" as NORMALIZER
+  component "Trust Evaluator" as TRUST
+  component "Relevance Ranker" as RANK
+  component "Prompt Builder" as PROMPT
+  component "Summary Parser" as PARSER
+  component "Digest Generator" as DIGEST
+  component "Observability Writer" as OBS
+
+}
+
+package "Test Suite — pytest" {
+
+  artifact "test_config.py" as TCONFIG
+  artifact "test_ingestion.py" as TINGESTION
+  artifact "test_scoring.py" as TSCORING
+  artifact "test_prompt_builder.py" as TPROMPT
+  artifact "test_summary_parser.py" as TPARSER
+  artifact "test_digest.py" as TDIGEST
+  artifact "test_observability.py" as TOBS
+
+}
+
+artifact "sample_articles.json" as SAMPLEARTICLES
+artifact "sample_config.yaml" as SAMPLECONFIG
+artifact "mock_llm_response.json" as MOCKLLM
+artifact "expected_digest.md" as EXPECTEDDIGEST
+artifact "expected_run_report.json" as EXPECTEDREPORT
+
+TCONFIG --> CONFIG
+TCONFIG --> SAMPLECONFIG
+
+TINGESTION --> READER
+TINGESTION --> NORMALIZER
+TINGESTION --> SAMPLEARTICLES
+
+TSCORING --> TRUST
+TSCORING --> RANK
+TSCORING --> SAMPLEARTICLES
+
+TPROMPT --> PROMPT
+TPARSER --> PARSER
+TPARSER --> MOCKLLM
+
+TDIGEST --> DIGEST
+TDIGEST --> EXPECTEDDIGEST
+
+TOBS --> OBS
+TOBS --> EXPECTEDREPORT
+
+note bottom of TPARSER
+POC 01 should mock the LLM response.
+Test parsing and structure before judging subjective summary quality.
+end note
+
+note right of TOBS
+Every run should be testable through:
+- generated files
+- JSON structure
+- logs
+- output paths
+end note
+
+@enduml
