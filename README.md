@@ -2,17 +2,38 @@
 
 ## Overview
 
-PENA-Agent is an experimental AI-agent platform exploring the intersection of:
+PENA-Agent is an experimental AI-agent project for building a personal news and knowledge assistant.
 
-- personal epistemic news aggregation,
+The first concrete use case is **PENA — Personal Epistemic News Aggregator**: an agent that helps a person find relevant information, filter noise, evaluate source quality, and produce useful summaries adapted to their context.
+
+The broader goal is to use this agent as a working laboratory for the intersection of:
+
+- personal news and knowledge aggregation,
 - AI-assisted software engineering,
-- and modern knowledge-centric SDLC methodologies.
+- modern spec-driven, knowledge-centric, iterative SDLC methodologies  
+  (see SDLC 2026: https://www.linkedin.com/feed/update/urn:li:activity:7460842876114075648/).
 
 The project has three primary goals:
 
-1. Build a Personal Epistemic News Aggregator (PENA)
-2. Validate and evolve the SDLC 2026 / SDLC2 engineering model
-3. Compare and evaluate modern AI-assisted development workflows and tools
+1. **Build a Personal Epistemic News Aggregator (PENA)**
+
+   Build a news and knowledge agent that filters, categorizes, checks source quality, and adapts results to a specific personal or professional context.
+
+   The goal is not to produce generic news summaries. The agent should understand the user’s domain, level of expertise, interests, and current knowledge.
+
+   For example, a doctor specializing in epidemiology should receive different results than a general reader. The agent should prioritize what is useful, trustworthy, and new for that person, instead of repeating information they already know.
+
+2. **Validate and evolve the SDLC 2026 / SDLC2 engineering model**
+
+   Use this project to test a spec-driven, iterative software development methodology step by step.
+
+   The project itself becomes a practical experiment: define the specification, build incrementally, evaluate what worked, identify missing or redundant steps, and improve the methodology through real implementation.
+
+3. **Compare and evaluate modern AI-assisted development workflows and tools**
+
+   Use the project to compare major AI-assisted development tools and workflows, including tools from OpenAI, Microsoft, Anthropic, Google, and others.
+
+   The focus is practical evaluation for experienced software developers: which tools help, where they create friction, how they support coding and design, and how they fit into a disciplined engineering process.
 
 The project is intentionally both:
 - a real executable system,
