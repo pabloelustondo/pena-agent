@@ -18,12 +18,12 @@ Product-level context: what PENA is, who it is for, what it should do.
 
 SDLC2 lifecycle artifacts. Follows the knowledge-centric engineering methodology used on this project.
 
-- `sdlc2/01-context/` — Context phase: domain, assumptions, constraints, tools
+- `sdlc2/01-context/` — SDLC2 context-phase methodology notes and lifecycle framing
+- `sdlc2/02-intent/` through `sdlc2/11-learning/` — Canonical SDLC2 lifecycle phase folders (placeholders allowed)
 - `sdlc2/03-benchmark/` — Benchmark definitions
 - `sdlc2/04-planning/` — Planning documents and handovers
-- Additional numbered phases (02, 05–11) will be populated as the project progresses.
 
-See `.instructions.md` at the repository root for a description of the SDLC2 loop.
+See [AGENTS.md](../AGENTS.md) and `README.md` files inside each SDLC2 phase folder for orientation.
 
 ### `history/`
 

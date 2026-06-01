@@ -1,14 +1,16 @@
 # Context
 
-This folder holds contextual information that shapes all downstream work: problem domain, constraints, assumptions, team knowledge, tool landscape, and project history.
+This folder holds SDLC2 context-phase methodology notes and lifecycle framing.
 
 ## Contents
 
-- **domain.md** — Problem space, user needs, domain-specific knowledge
-- **constraints.md** — Technical, organizational, and scope constraints
-- **assumptions.md** — Explicit assumptions about users, technology, feasibility
-- **history.md** — Key decisions, experiments, learnings from prior iterations
-- **tools.md** — Tools, frameworks, and dependencies under evaluation
-- **team.md** — Team knowledge, skills, roles, communication patterns
+- **README.md** — Phase orientation and boundaries
+
+Product-context documents were moved to `docs/product/context/`:
+
+- `docs/product/context/domain.md`
+- `docs/product/context/constraints.md`
+- `docs/product/context/assumptions.md`
+- `docs/product/context/tools.md`
 
 This is a living document. As the project learns, context evolves.
